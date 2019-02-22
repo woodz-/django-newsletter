@@ -109,7 +109,7 @@ class SettingsTestCase(TestCase):
         """
 
         self.assertRaises(
-            DoesNotExis, lambda: newsletter_settings.SWAP_SITE_NAME
+            ObjectDoesNotExist, lambda: newsletter_settings.SWAP_SITE_NAME
         )
 
 

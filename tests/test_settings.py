@@ -6,7 +6,6 @@ from django.test import TestCase
 from django.test.utils import override_settings
 
 from django.core.exceptions import ImproperlyConfigured
-from django.contrib.sites.models import Site
 
 from newsletter.settings import newsletter_settings
 
@@ -102,22 +101,3 @@ class SettingsTestCase(TestCase):
         Test whether e-mail confirmation overrides come through.
         """
         self.assertFalse(newsletter_settings.CONFIRM_EMAIL_UPDATE)
-    
-    @override_settings(NEWSLETTER_SWAP_SITE_NAME='banana.nowaythisexists')
-    def test_swap_site_nonexistent(self):
-        """
-        Setting nonexistent swap site yields django.contrib.sites.models.DoesNotExist.
-        """
-        
-        self.assertTrue(1 == 1)
-
-        #self.assertRaises(
-            #Site.DoesNotExist, lambda: newsletter_settings.SWAP_SITE_NAME
-        #)
-
-
-
-
-
-
-

@@ -4,6 +4,7 @@ from django.conf import settings
 
 from django.test import TestCase
 from django.test.utils import override_settings
+from django.contrib.sites.models import DoesNotExist
 
 from django.core.exceptions import ImproperlyConfigured
 
@@ -105,11 +106,11 @@ class SettingsTestCase(TestCase):
     @override_settings(NEWSLETTER_SWAP_SITE_NAME='banana.nowaythisexists')
     def test_swap_site_nonexistent(self):
         """
-        Setting nonexistent newsletter swap site yields ImproperlyConfigured.
+        Setting nonexistent swap site yields django.contrib.sites.models.DoesNotExist.
         """
 
         self.assertRaises(
-            ImproperlyConfigured, lambda: newsletter_settings.SWAP_SITE_NAME
+            DoesNotExist, lambda: newsletter_settings.SWAP_SITE_NAME
         )
 
 

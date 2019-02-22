@@ -101,3 +101,20 @@ class SettingsTestCase(TestCase):
         Test whether e-mail confirmation overrides come through.
         """
         self.assertFalse(newsletter_settings.CONFIRM_EMAIL_UPDATE)
+    
+    @override_settings(NEWSLETTER_SWAP_SITE_NAME='banana.nowaythisexists')
+    def test_swap_site_nonexistent(self):
+        """
+        Setting nonexistent newsletter swap site yields ImproperlyConfigured.
+        """
+
+        self.assertRaises(
+            ImproperlyConfigured, lambda: newsletter_settings.SWAP_SITE_NAME
+        )
+
+
+
+
+
+
+

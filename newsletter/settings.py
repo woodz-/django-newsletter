@@ -105,20 +105,10 @@ class NewsletterSettings(Settings):
     
     @property
     def SWAP_SITE_NAME(self):
-        try:
-            NEWSLETTER_SWAP_SITE_NAME = getattr(
-                django_settings, "NEWSLETTER_SWAP_SITE_NAME", Site.objects.get_current().name
-            )
-            return NEWSLETTER_SWAP_SITE_NAME
-        except Exception as e:
-            raise ImproperlyConfigured(
-                "Error while importing setting "
-                "NEWSLETTER_SWAP_SITE_NAME %r: %s" % (
-                    NEWSLETTER_SWAP_SITE_NAME, e
-                )
-            )
-        return None
-        
+        NEWSLETTER_SWAP_SITE_NAME = getattr(
+            django_settings, "NEWSLETTER_SWAP_SITE_NAME", Site.objects.get_current().name
+        )
+        return NEWSLETTER_SWAP_SITE_NAME
          
 
 newsletter_settings = NewsletterSettings()

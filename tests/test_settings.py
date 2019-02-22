@@ -5,7 +5,8 @@ from django.conf import settings
 from django.test import TestCase
 from django.test.utils import override_settings
 
-from django.core.exceptions import ImproperlyConfigured, ObjectDoesNotExist
+from django.core.exceptions import ImproperlyConfigured
+from django.contrib.sites.models import Site
 
 from newsletter.settings import newsletter_settings
 
@@ -109,7 +110,7 @@ class SettingsTestCase(TestCase):
         """
 
         self.assertRaises(
-            ObjectDoesNotExist, lambda: newsletter_settings.SWAP_SITE_NAME
+            Site.DoesNotExist, lambda: newsletter_settings.SWAP_SITE_NAME
         )
 
 

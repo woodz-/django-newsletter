@@ -22,6 +22,7 @@ from .compat import get_context, reverse
 from .utils import (
     make_activation_code, get_default_sites, ACTIONS
 )
+from .settings import newsletter_settings
 
 logger = logging.getLogger(__name__)
 
@@ -55,8 +56,6 @@ class Newsletter(models.Model):
 
     objects = models.Manager()
 
-    # Automatically filter the current site
-    on_site = CurrentSiteManager()
 
     def get_templates(self, action):
         """
@@ -333,7 +332,7 @@ class Subscription(models.Model):
 
         variable_dict = {
             'subscription': self,
-            'site': Site.objects.get_current(),
+            'site': self.newsletter.site.filter(name=newsletter_settings.SWAP_SITE_NAME).get(),
             'newsletter': self.newsletter,
             'date': self.subscribe_date,
             'STATIC_URL': settings.STATIC_URL,
@@ -538,7 +537,7 @@ class Submission(models.Model):
     def extra_headers(self):
         return {
             'List-Unsubscribe': 'http://%s%s' % (
-                Site.objects.get_current().domain,
+                self.newsletter.site.filter(name=newsletter_settings.SWAP_SITE_NAME).get().domain,
                 reverse('newsletter_unsubscribe_request',
                         args=[self.message.newsletter.slug])
             ),
@@ -575,7 +574,7 @@ class Submission(models.Model):
     def send_message(self, subscription):
         variable_dict = {
             'subscription': subscription,
-            'site': Site.objects.get_current(),
+            'site': self.newsletter.site.filter(name=newsletter_settings.SWAP_SITE_NAME).get(),
             'submission': self,
             'message': self.message,
             'newsletter': self.newsletter,

@@ -2,6 +2,7 @@ from importlib import import_module
 
 from django.conf import settings as django_settings
 from django.core.exceptions import ImproperlyConfigured
+from django.contrib.sites.models import Site
 
 from .utils import Singleton
 
@@ -101,5 +102,13 @@ class NewsletterSettings(Settings):
                 )
 
         return None
+    
+    @property
+    def SWAP_SITE_NAME(self):
+        NEWSLETTER_SWAP_SITE_NAME = getattr(
+            django_settings, "NEWSLETTER_SWAP_SITE_NAME", Site.objects.get_current().name
+        )
+        return NEWSLETTER_SWAP_SITE_NAME
+         
 
 newsletter_settings = NewsletterSettings()

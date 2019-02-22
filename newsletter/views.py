@@ -49,7 +49,11 @@ def is_authenticated(user):
 
 class NewsletterViewBase(object):
     """ Base class for newsletter views. """
-    queryset = Newsletter.on_site.filter(visible=True)
+    queryset = Newsletter.objects.filter(
+        site=Site.objects.filter(
+            name=newsletter_settings.SWAP_SITE_NAME
+        ).get().id
+    ).filter(visible=True)
     allow_empty = False
     slug_url_kwarg = 'newsletter_slug'
 
@@ -173,7 +177,11 @@ class NewsletterMixin(ProcessUrlDataMixin):
 
         newsletter_queryset = kwargs.get(
             'newsletter_queryset',
-            Newsletter.on_site.all()
+            Newsletter.objects.filter(
+                site=Site.objects.filter(
+                    name=newsletter_settings.SWAP_SITE_NAME
+                ).get().id
+            )
         )
         newsletter_slug = kwargs['newsletter_slug']
 
@@ -259,7 +267,7 @@ class ActionFormView(NewsletterMixin, ActionMixin, FormView):
 
     def get_url_from_viewname(self, viewname):
         """
-        Return url for given `viename`
+        Return url for given `viewname`
         and associated with this view newsletter and action.
         """
 
@@ -592,7 +600,7 @@ class SubmissionArchiveDetailView(SubmissionViewBase, DateDetailView):
 
         context.update({
             'message': message,
-            'site': Site.objects.get_current(),
+            'site': Site.objects.filter(name=newsletter_settings.SWAP_SITE_NAME).get(),
             'date': self.object.publish_date,
             'STATIC_URL': settings.STATIC_URL,
             'MEDIA_URL': settings.MEDIA_URL

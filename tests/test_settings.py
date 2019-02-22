@@ -1,10 +1,10 @@
 import unittest
+import django
 
 from django.conf import settings
 
 from django.test import TestCase
 from django.test.utils import override_settings
-from django.db.models.base import ObjectDoesNotExist
 
 from django.core.exceptions import ImproperlyConfigured
 
@@ -110,7 +110,7 @@ class SettingsTestCase(TestCase):
         """
 
         self.assertRaises(
-            DoesNotExist, lambda: newsletter_settings.SWAP_SITE_NAME
+            django.contrib.sites.models.DoesNotExis, lambda: newsletter_settings.SWAP_SITE_NAME
         )
 
 
